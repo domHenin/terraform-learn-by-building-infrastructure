@@ -5,7 +5,8 @@ provider "aws" {
 
 # 2a. Create VPC
 resource "aws_vpc" "clxdev_vpc" {
-  cidr_block = var.cidr_block
+  # cidr_block = var.vpc_cidr_block
+  cidr_block = "192.168.0.0/16"
 
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -83,7 +84,7 @@ resource "aws_eip" "clxdev_nat_eip" {
 
 # 6b. NAT Gateway
 resource "aws_nat_gateway" "clxdev_nat_gw" {
-  allocation_id = aws_eip.nat_eip.id
+  allocation_id = aws_eip.clxdev_nat_eip.id
   subnet_id     = aws_subnet.clxdev_subnet_pub.id
 
   tags = {
@@ -111,7 +112,7 @@ resource "aws_route_table" "clxdev_priv_rt" {
 # 8. Associate Route Table to the private subnet.
 resource "aws_route_table_association" "clxdev_nat_priv_associate" {
   subnet_id      = aws_subnet.clxdev_subnet_pri.id
-  route_table_id = aws_route_table.rt_private.id
+  route_table_id = aws_route_table.clxdev_priv_rt.id
 }
 
 
@@ -210,7 +211,7 @@ resource "aws_security_group" "clxdev_wp_http" {
 # 12. Create WordPress Instance in the public subnet
 resource "aws_instance" "clxdev_wordpress_host" {
   ami                         = var.wp_ami
-  instance_type               = var.bastion_instance_type
+  instance_type               = var.wp_instance_type
   subnet_id                   = aws_subnet.clxdev_subnet_pub.id
   # key_name                    = aws_key_pair.webserver_key.key_name
   vpc_security_group_ids      = [aws_security_group.clxdev_wp_http.id]
@@ -240,7 +241,7 @@ resource "aws_security_group" "clxdev_sg_mysql" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.clxdev_bastion_ss.id]
+    security_groups = [aws_security_group.clxdev_bastion_ssh.id]
   }
 
   egress {
@@ -254,7 +255,7 @@ resource "aws_security_group" "clxdev_sg_mysql" {
     Name = var.mysql_sg_tag
   }
 
-  depends_on = [aws_security_group.wp_http, aws_security_group.clxdev_bastion_ss]
+  depends_on = [aws_security_group.clxdev_wp_http, aws_security_group.clxdev_bastion_ssh]
 }
 
 
