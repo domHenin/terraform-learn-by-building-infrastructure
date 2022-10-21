@@ -20,6 +20,7 @@ As new guides cross my path to assist in my knowledge and understanding of how t
 - [Launching Web Application with AWS using Terraform and Git](https://developer-shubham-rasal.medium.com/launching-web-application-with-aws-using-terraform-and-git-fd7484922e4d)
 - [Creating a simple EC2 instance webserver which will clone code from our GitHub repository](https://developer-shubham-rasal.medium.com/launching-aws-ec2-webserver-instance-in-terraform-8e219fe7be66)
 - [Create AWS EC2 Instance using Terraform](https://developer-shubham-rasal.medium.com/create-aws-ec2-instance-using-terraform-3a3a2d273048)
+- [Create an Nginx instance in AWS using Terraform](https://awstip.com/how-to-create-an-nginx-instance-in-aws-using-terraform-feb6af12749a)
 
 ----
 ## Running Terraform
